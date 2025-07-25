@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart - BOOKER</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <!-- Header -->
+  <header class="bg-gray-900 text-white px-6 py-4 flex justify-between items-center shadow">
+    <h1 class="text-2xl font-bold text-yellow-400">BOOKER</h1>
+    <nav class="space-x-4">
+      <a href="home.html" class="hover:text-yellow-300">Home</a>
+      <a href="profile.html" class="hover:text-yellow-300">Profile</a>
+      <button id="purchaseBtn" class="bg-yellow-500 hover:bg-yellow-400 text-black font-semibold px-4 py-2 rounded">Purchase</button>
+    </nav>
+  </header>
+
+  <!-- Cart Container -->
+  <div class="max-w-5xl mx-auto bg-white mt-10 p-6 rounded-lg shadow-lg">
+    <h2 class="text-3xl font-bold mb-6 text-center">🛒 Your Cart</h2>
+    <div id="cartItems" class="space-y-6">
+      <!-- Cart items will be injected here -->
+    </div>
+  </div>
+
+  <!-- Purchase Success Modal -->
+  <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full animate__animated animate__fadeInUp animate__faster">
+      <div class="flex justify-center mb-4">
+        <div class="bg-green-100 p-3 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+      </div>
+      
+      <h2 class="text-3xl font-bold text-gray-800 mb-2">Purchase Successful!</h2>
+      <p class="text-gray-600 mb-6">Thank you for your order. Your books will be delivered soon.</p>
+      
+      <div class="bg-gray-50 p-4 rounded-lg mb-6">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="font-semibold text-gray-800">The Great Gatsby</h3>
+          <span class="text-gray-600">¥299</span>
+        </div>
+        <p class="text-sm text-gray-500">by F. Scott Fitzgerald</p>
+      </div>
+      
+      <div class="flex justify-between text-sm text-gray-500 mb-6">
+        <a href="#" class="hover:text-yellow-500">Home</a>
+        <a href="#" class="hover:text-yellow-500">Profile</a>
+        <a href="#" class="hover:text-yellow-500">Purchase</a>
+      </div>
+      
+      <button onclick="closeModal()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-semibold px-6 py-3 rounded-lg transition duration-200">
+        OK
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const cartItemsContainer = document.getElementById("cartItems");
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function renderCart() {
+      cartItemsContainer.innerHTML = "";
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = "<p class='text-center text-gray-500'>Your cart is empty.</p>";
+        return;
+      }
+
+      cart.forEach((book, index) => {
+        const item = document.createElement("div");
+        item.className = "flex gap-6 items-center border-b pb-4";
+
+        item.innerHTML = `
+          <img src="${book.image}" alt="Book" class="w-28 h-36 object-cover rounded">
+          <div class="flex-1">
+            <h3 class="text-xl font-bold">${book.title}</h3>
+            <p class="text-gray-600">by ${book.author}</p>
+            <p class="text-lg font-semibold text-green-600 mt-1">₹${book.price}</p>
+          </div>
+          <button onclick="removeFromCart(${index})" class="bg-red-500 hover:bg-red-400 text-white px-4 py-2 rounded">Remove</button>
+        `;
+
+        cartItemsContainer.appendChild(item);
+      });
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function closeModal() {
+      document.getElementById("successModal").classList.add("hidden");
+      // Optionally clear cart after purchase
+      localStorage.removeItem("cart");
+      cart = [];
+      renderCart();
+    }
+
+    document.getElementById("purchaseBtn").addEventListener("click", () => {
+      if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
+      document.getElementById("successModal").classList.remove("hidden");
+    });
+
+    // Initial render
+    renderCart();
+  </script>
+
+</body>
+</html>

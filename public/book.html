@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Book Details</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h2>Book Details</h2>
+  <div id="bookDetails"></div>
+
+  <script src="main.js"></script>
+  <script>
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (id) fetchBookDetails(id);
+  </script>
+</body>
+</html>

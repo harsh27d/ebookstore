@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Profile | BOOKER</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8fafc;
+    }
+    .profile-card {
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    .profile-card:hover {
+      box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.15);
+    }
+    .input-field {
+      transition: all 0.3s ease;
+    }
+    .input-field:focus {
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation Header -->
+  <header class="bg-gray-900 text-white px-6 py-4 flex justify-between items-center shadow">
+    <h1 class="text-2xl font-bold text-yellow-400">BOOKER</h1>
+    <nav class="space-x-4">
+      <a href="home.html" class="hover:text-yellow-300"><i class="fas fa-home mr-1"></i> Home</a>
+      <a href="profile.html" class="hover:text-yellow-300"><i class="fas fa-user mr-1"></i> Profile</a>
+      <a href="cart.html" class="hover:text-yellow-300"><i class="fas fa-shopping-cart mr-1"></i> Cart</a>
+    </nav>
+  </header>
+
+  <!-- Profile Edit Section -->
+  <div class="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="profile-card bg-white rounded-xl p-8 sm:p-10">
+      <div class="flex items-center mb-8">
+        <div class="bg-yellow-100 p-3 rounded-full mr-4">
+          <i class="fas fa-user-edit text-yellow-500 text-xl"></i>
+        </div>
+        <h2 class="text-3xl font-bold text-gray-800">Edit Your Profile</h2>
+      </div>
+      <!-- Profile Photo -->
+      <div class="flex justify-center mb-6">
+        <img
+          id="profilePhoto"
+          src="/uploads/default-avatar.png"
+          alt="Profile Photo"
+          class="w-32 h-32 object-cover rounded-full shadow border-4 border-yellow-400"
+        />
+      </div>
+      <!-- Form -->
+      <form id="editForm" class="space-y-6">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-user text-gray-400"></i>
+            </div>
+            <input
+              type="text"
+              id="name"
+              placeholder="Your name"
+              required
+              class="input-field pl-10 block w-full rounded-lg border-gray-300 shadow-sm py-3 px-4 border"
+            />
+          </div>
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-envelope text-gray-400"></i>
+            </div>
+            <input
+              type="email"
+              id="email"
+              placeholder="your.email@example.com"
+              required
+              class="input-field pl-10 block w-full rounded-lg border-gray-300 shadow-sm py-3 px-4 border"
+            />
+          </div>
+        </div>
+        <div class="pt-2">
+          <button
+            type="submit"
+            class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 font-medium transition duration-150"
+          >
+            <i class="fas fa-save mr-2"></i> Update Profile
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    const token = localStorage.getItem('token');
+
+    // Load user data on page load
+    fetch('/api/profile', {
+      headers: { Authorization: token }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch profile');
+        return res.json();
+      })
+      .then(user => {
+        document.getElementById('name').value = user.name || '';
+        document.getElementById('email').value = user.email || '';
+
+        // Use 'photo' field as saved in DB; falls back to default if missing/empty
+        const photoPath =
+          user.photo && user.photo.trim() !== ''
+            ? user.photo
+            : '/uploads/default-avatar.png';
+
+        document.getElementById('profilePhoto').src = photoPath;
+      })
+      .catch(err => {
+        console.error('Error:', err);
+        alert('Failed to load profile');
+      });
+
+    // Submit updated profile details
+    document.getElementById('editForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const updateBtn = e.target.querySelector('button[type="submit"]');
+      updateBtn.disabled = true;
+      updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Updating...';
+
+      fetch('/api/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token
+        },
+        body: JSON.stringify({
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value
+        })
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('Update failed');
+          return res.json();
+        })
+        .then(data => {
+          const msg = document.createElement('div');
+          msg.className = 'mt-4 p-3 bg-green-100 text-green-700 rounded-lg text-center';
+          msg.innerHTML = '<i class="fas fa-check-circle mr-2"></i>' + data.message;
+          document.getElementById('editForm').appendChild(msg);
+          setTimeout(() => msg.remove(), 3000);
+        })
+        .catch(err => {
+          console.error('Error:', err);
+          alert('Failed to update profile');
+        })
+        .finally(() => {
+          updateBtn.disabled = false;
+          updateBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Update Profile';
+        });
+    });
+  </script>
+</body>
+</html>

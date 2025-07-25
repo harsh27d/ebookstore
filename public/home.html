@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BOOKER - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="home.css">
+</head>
+<body class="bg-black text-white overflow-x-hidden">
+
+  <!-- Header -->
+  <header class="flex items-center justify-between px-6 py-4 bg-gray-900 shadow-lg">
+    <h1 class="text-3xl font-bold text-yellow-400">BOOKER</h1>
+    <nav>
+      <a href="profile.html" class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-400 transition">Profile</a>
+      <a href="cart.html" class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-400 transition">Go to Cart</a>
+      <a href="login.html" class="bg-yellow-500 text-black px-4 py-2 rounded hover:bg-yellow-400 transition">Logout</a>
+    </nav>
+  </header>
+
+  <!-- Carousel -->
+  <div class="relative h-screen overflow-hidden">
+    <div id="heroTrack" class="flex transition-transform duration-700 ease-in-out w-full h-full">
+      <!-- Slides will be injected by JS -->
+    </div>
+
+    <!-- Arrows -->
+    <button id="slideLeft" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-80 z-10">
+      &#10094;
+    </button>
+    <button id="slideRight" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-80 z-10">
+      &#10095;
+    </button>
+  </div>
+
+  <!-- Informational Section -->
+  <section class="bg-gray-100 text-black py-16 px-6">
+    <div class="text-center mb-10">
+      <h2 class="text-4xl font-bold mb-2">Why Choose BOOKER?</h2>
+      <p class="text-lg text-gray-700">Explore, Rent, and Read – your library on demand.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- Box 1 -->
+      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <div class="w-full h-40 flex items-center justify-center mb-4 rounded text-7xl">📚</div>
+        <h3 class="text-xl font-bold text-yellow-600 mb-2">📚 Information</h3>
+        <p class="text-gray-600 text-sm mb-2">
+          Dive into a vast selection of books tailored for every reader. From academic to fiction – we’ve got it all.
+        </p>
+        <a href="#" class="text-red-600 font-semibold">» Read more</a>
+      </div>
+
+      <!-- Box 2 -->
+      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <div class="w-full h-40 flex items-center justify-center mb-4 rounded text-7xl">📖</div>
+        <h3 class="text-xl font-bold text-green-700 mb-2">📖 Product Details</h3>
+        <p class="text-gray-600 text-sm mb-2">
+          Easy rentals, clear pricing, and instant access to details of your favorite reads. Transparent and trustworthy.
+        </p>
+        <a href="#" class="text-red-600 font-semibold">» Read more</a>
+      </div>
+
+      <!-- Box 3 -->
+      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <div class="w-full h-40 flex items-center justify-center mb-4 rounded text-7xl">🎁</div>
+        <h3 class="text-xl font-bold text-orange-600 mb-2">🎉 Specials</h3>
+        <p class="text-gray-600 text-sm mb-2">
+          Check out our featured books, limited-time offers, and exclusive bundles designed just for book lovers.
+        </p>
+        <a href="#" class="text-red-600 font-semibold">» Read more</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Book Detail Modal -->
+  <div id="bookDetailModal" class="fixed inset-0 bg-black bg-opacity-80 text-white flex flex-col items-center justify-center hidden z-50 p-4">
+    <button id="bookDetailClose" class="absolute top-4 right-6 text-white text-2xl">&times;</button>
+    <img id="bookDetailImage" class="w-64 h-80 object-cover mb-4 rounded-lg shadow-lg" />
+    <h2 id="bookDetailTitle" class="text-2xl font-bold mb-1"></h2>
+    <p id="bookDetailAuthor" class="mb-1"></p>
+    <p id="bookDetailPrice" class="mb-1"></p>
+    <p id="bookDetailDesc" class="mb-4 max-w-xl text-center"></p>
+    <button id="addToCartBtn" class="bg-yellow-500 text-black px-6 py-2 rounded hover:bg-yellow-400">Add to Cart</button>
+  </div>
+
+   
+  <script src="home.js"></script>
+ 
+</body>
+</html>
